@@ -60,14 +60,6 @@ a { color: inherit; }
 .leg { font-size: 12px; }
 .leg > span { white-space: nowrap; margin-right: 14px; }
 footer { margin-top: 36px; color: var(--dim); }
-#cur, #dot { display: none; }
-@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html.cur, html.cur * { cursor: none !important; }
-  html.cur #cur, html.cur #dot { display: block; position: fixed; left: 0; top: 0; pointer-events: none; z-index: 10; }
-  #dot { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: var(--fg); border-radius: 50%; }
-  #cur { width: 0; height: 0; perspective: 160px; }
-  .ring { position: absolute; left: -12px; top: -12px; width: 24px; height: 24px; border: 1px solid var(--fg); border-radius: 50%; opacity: .55; }
-}
 </style>
 </head>
 <body>
@@ -186,9 +178,6 @@ footer { margin-top: 36px; color: var(--dim); }
 <footer><span class="en">updated oct 2026</span><span class="fr">mis à jour en octobre 2026</span></footer>
 </main>
 
-<div id="cur" aria-hidden="true"><div class="ring"></div></div>
-<div id="dot" aria-hidden="true"></div>
-
 <script>
 // nowcast backtest 2010Q1-2026Q2, 2020Q1-2021Q1 left out
 const NOW = {
@@ -275,31 +264,6 @@ let rt;
 new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 50); })
   .observe(document.getElementById('c-nowcast'));
 
-// cursor: a thin ring trails the pointer and tilts toward where it's going. mouse only, off for reduced motion
-(() => {
-  if (!matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return;
-  const cur = document.getElementById('cur'), dot = document.getElementById('dot'), ring = cur.firstElementChild;
-  let mx = 0, my = 0, x = 0, y = 0, tx = 0, ty = 0, s = 1, target = 1, seen = false;
-  const clamp = v => Math.max(-55, Math.min(55, v));
-  addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    if (!seen) { seen = true; x = mx; y = my; document.documentElement.classList.add('cur'); }
-    dot.style.transform = `translate(${mx}px, ${my}px)`;
-  }, { passive: true });
-  document.addEventListener('mouseover', e => { target = e.target.closest('a, button') ? 1.6 : 1; });
-  document.addEventListener('mouseleave', () => { cur.style.opacity = dot.style.opacity = 0; });
-  document.addEventListener('mouseenter', () => { cur.style.opacity = dot.style.opacity = 1; });
-  (function tick() {
-    const dx = mx - x, dy = my - y;
-    x += dx * 0.2; y += dy * 0.2;
-    // lean into the motion, settle back flat when the pointer stops
-    tx += (clamp(-dy * 1.6) - tx) * 0.2; ty += (clamp(dx * 1.6) - ty) * 0.2;
-    s += (target - s) * 0.2;
-    cur.style.transform = `translate(${x}px, ${y}px)`;
-    ring.style.transform = `rotateX(${tx}deg) rotateY(${ty}deg) scale(${s})`;
-    requestAnimationFrame(tick);
-  })();
-})();
 </script>
 </body>
 </html>
