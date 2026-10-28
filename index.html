@@ -60,6 +60,21 @@ a { color: inherit; }
 .leg { font-size: 12px; }
 .leg > span { white-space: nowrap; margin-right: 14px; }
 footer { margin-top: 36px; color: var(--dim); }
+#cur, #dot { display: none; }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html.cur, html.cur * { cursor: none !important; }
+  html.cur #cur, html.cur #dot { display: block; position: fixed; left: 0; top: 0; pointer-events: none; z-index: 10; }
+  #dot { width: 4px; height: 4px; margin: -2px 0 0 -2px; background: var(--fg); border-radius: 50%; }
+  #cur { width: 0; height: 0; perspective: 240px; }
+  .cube { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; transform-style: preserve-3d; }
+  .cube i { position: absolute; inset: 0; border: 1px solid var(--fg); background: var(--band2); opacity: .75; }
+  .cube i:nth-child(1) { transform: translateZ(9px); }
+  .cube i:nth-child(2) { transform: rotateY(180deg) translateZ(9px); }
+  .cube i:nth-child(3) { transform: rotateY(90deg) translateZ(9px); }
+  .cube i:nth-child(4) { transform: rotateY(-90deg) translateZ(9px); }
+  .cube i:nth-child(5) { transform: rotateX(90deg) translateZ(9px); }
+  .cube i:nth-child(6) { transform: rotateX(-90deg) translateZ(9px); }
+}
 </style>
 </head>
 <body>
@@ -177,6 +192,9 @@ footer { margin-top: 36px; color: var(--dim); }
 <footer><span class="en">updated oct 2026</span><span class="fr">mis à jour en octobre 2026</span></footer>
 </main>
 
+<div id="cur" aria-hidden="true"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+<div id="dot" aria-hidden="true"></div>
+
 <script>
 // nowcast backtest 2010Q1-2026Q2, 2020Q1-2021Q1 left out
 const NOW = {
@@ -262,6 +280,31 @@ markLang();
 let rt;
 new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 50); })
   .observe(document.getElementById('c-nowcast'));
+
+// cursor: a wireframe cube trails the pointer and rolls with it. mouse only, off for reduced motion
+(() => {
+  if (!matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)').matches) return;
+  const cur = document.getElementById('cur'), dot = document.getElementById('dot'), cube = cur.firstElementChild;
+  let mx = 0, my = 0, x = 0, y = 0, rx = -25, ry = 35, s = 1, target = 1, seen = false;
+  addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    if (!seen) { seen = true; x = mx; y = my; document.documentElement.classList.add('cur'); }
+    dot.style.transform = `translate(${mx}px, ${my}px)`;
+  }, { passive: true });
+  document.addEventListener('mouseover', e => { target = e.target.closest('a, button') ? 1.8 : 1; });
+  document.addEventListener('mouseleave', () => { cur.style.opacity = dot.style.opacity = 0; });
+  document.addEventListener('mouseenter', () => { cur.style.opacity = dot.style.opacity = 1; });
+  (function tick() {
+    const dx = mx - x, dy = my - y;
+    x += dx * 0.18; y += dy * 0.18;
+    // roll like a ball under the pointer, plus a slow idle spin
+    ry += dx * 0.35 + 0.3; rx -= dy * 0.35;
+    s += (target - s) * 0.2;
+    cur.style.transform = `translate(${x}px, ${y}px)`;
+    cube.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) scale3d(${s}, ${s}, ${s})`;
+    requestAnimationFrame(tick);
+  })();
+})();
 </script>
 </body>
 </html>
