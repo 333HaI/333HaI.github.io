@@ -8,6 +8,12 @@
 <link rel="icon" href="data:,">
 <script>
 try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+// saved choice first, otherwise french for french-language browsers
+let lang = null;
+try { lang = localStorage.getItem('lang'); } catch (e) {}
+if (lang !== 'en' && lang !== 'fr') lang = (navigator.language || '').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+document.documentElement.dataset.lang = lang;
+document.documentElement.lang = lang;
 </script>
 <style>
 :root { color-scheme: light; --bg: #fff1e5; --fg: #1a1817; --dim: #6e6660; --rule: #e8d9cb;
@@ -30,9 +36,11 @@ p { margin: 2px 0; }
 a { color: inherit; }
 .links a { margin-right: 14px; white-space: nowrap; }
 .top { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-#theme { font: inherit; font-size: 12px; color: var(--dim); background: none; border: 0; padding: 0; cursor: pointer; }
-#theme span:hover { text-decoration: underline; }
-#theme .on { color: var(--fg); }
+:root:not([data-lang="fr"]) .fr, :root[data-lang="fr"] .en { display: none; }
+.ctl { display: flex; gap: 18px; white-space: nowrap; }
+.ctl button { font: inherit; font-size: 12px; color: var(--dim); background: none; border: 0; padding: 0; cursor: pointer; }
+.ctl button > span:hover { text-decoration: underline; }
+.ctl .on { color: var(--fg); }
 .p { display: grid; grid-template-columns: 36px 1fr; padding: 20px 0 22px; border-top: 1px solid var(--rule); }
 .p:not(:has(+ .p)) { border-bottom: 1px solid var(--rule); }
 .p > div { min-width: 0; }
@@ -59,82 +67,109 @@ footer { margin-top: 36px; color: var(--dim); }
 
 <div class="top">
   <h1>haris imam</h1>
-  <button id="theme" type="button" aria-label="toggle dark mode"><span data-t="light">light</span> / <span data-t="dark">dark</span></button>
+  <div class="ctl">
+    <button id="lang" type="button" aria-label="switch language / changer de langue"><span data-l="en">en</span> / <span data-l="fr">fr</span></button>
+    <button id="theme" type="button" aria-label="toggle dark mode"><span data-t="light"><span class="en">light</span><span class="fr">clair</span></span> / <span data-t="dark"><span class="en">dark</span><span class="fr">sombre</span></span></button>
+  </div>
 </div>
-<p>economics master's student, macro and finance. cfa level ii candidate.</p>
-<p class="dim">montreal</p>
+<p class="en">economics master's student, macro and finance. cfa level ii candidate.</p>
+<p class="fr">étudiant à la maîtrise en économie, macro et finance. candidat au niveau ii du cfa.</p>
+<p class="dim"><span class="en">montreal</span><span class="fr">montréal</span></p>
 <p class="links" style="margin-top:10px">
   <a href="https://github.com/333HaI">github</a><a href="https://www.linkedin.com/in/haris-i-9279a033b/">linkedin</a><a href="mailto:haris.im@proton.me">haris.im@proton.me</a><a href="tel:+15145754626">514-575-4626</a>
 </p>
 
-<h2>projects</h2>
+<h2><span class="en">projects</span><span class="fr">projets</span></h2>
 
 <div class="p"><span class="n">01</span><div>
-  <div class="t"><h3>canada gdp nowcast</h3><span class="dim">python · statsmodels</span></div>
-  <p>weekly nowcast of canadian real gdp. mixed-frequency dynamic factor model on 20 monthly
+  <div class="t"><h3><span class="en">canada gdp nowcast</span><span class="fr">prévision immédiate du pib canadien</span></h3><span class="dim">python · statsmodels</span></div>
+  <p class="en">weekly nowcast of canadian real gdp. mixed-frequency dynamic factor model on 20 monthly
     statcan, boc and fred series, refit every friday by github actions.</p>
-  <p>backtest 2010-26, ex covid: rmse 1.59, vs 2.23 for an ar(1) and 1.90 for a naive tracker.</p>
+  <p class="fr">prévision immédiate hebdomadaire du pib réel canadien. modèle à facteurs dynamiques à
+    fréquences mixtes sur 20 séries mensuelles de statcan, de la bdc et de la fred, réestimé chaque
+    vendredi par github actions.</p>
+  <p class="en">backtest 2010-26, ex covid: rmse 1.59, vs 2.23 for an ar(1) and 1.90 for a naive tracker.</p>
+  <p class="fr">test rétrospectif 2010-2026, hors covid&nbsp;: rmse de 1,59, contre 2,23 pour un ar(1) et
+    1,90 pour un suivi naïf.</p>
   <div class="chart" id="c-nowcast"></div>
-  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span>nowcast at end of quarter</span>
-    <span><span class="k" style="border-color:var(--line2)"></span>published</span> <span>% q/q ar</span></p>
-  <p><a href="https://333hai.github.io/canada-gdp-nowcast/">live</a>
+  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span><span class="en">nowcast at end of quarter</span><span class="fr">prévision en fin de trimestre</span></span>
+    <span><span class="k" style="border-color:var(--line2)"></span><span class="en">published</span><span class="fr">publié</span></span>
+    <span><span class="en">% q/q ar</span><span class="fr">% t/t annualisé</span></span></p>
+  <p><a href="https://333hai.github.io/canada-gdp-nowcast/"><span class="en">live</span><span class="fr">en ligne</span></a>
     &nbsp; <a href="https://github.com/333HaI/canada-gdp-nowcast">code</a></p>
 </div></div>
 
 <div class="p"><span class="n">02</span><div>
-  <div class="t"><h3>fiscal multipliers in cee economies</h3><span class="dim">python · linearmodels</span></div>
-  <p>master's research paper, graded a+. state-dependent local projections on 8 central and
+  <div class="t"><h3><span class="en">fiscal multipliers in cee economies</span><span class="fr">multiplicateurs budgétaires en europe centrale et orientale</span></h3><span class="dim">python · linearmodels</span></div>
+  <p class="en">master's research paper, graded a+. state-dependent local projections on 8 central and
     eastern european countries, 1997-2024, driscoll-kraay errors.</p>
-  <p>a year after a spending shock the multiplier is 3.9 in recessions and -2.0 in expansions.
+  <p class="fr">rapport de recherche de maîtrise, note a+. projections locales selon le régime sur 8 pays
+    d'europe centrale et orientale, 1997-2024, erreurs de driscoll-kraay.</p>
+  <p class="en">a year after a spending shock the multiplier is 3.9 in recessions and -2.0 in expansions.
     dropping 2020-21 shrinks it and the gap stops being significant.</p>
+  <p class="fr">un an après un choc de dépenses, le multiplicateur est de 3,9 en récession et de -2,0 en
+    expansion. sans 2020-2021, il diminue et l'écart cesse d'être significatif.</p>
   <div class="chart" id="c-fiscal"></div>
-  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span>recession</span>
+  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span><span class="en">recession</span><span class="fr">récession</span></span>
     <span><span class="k" style="border-color:var(--line2)"></span>expansion</span>
-    <span>95% bands</span> <span>x: quarters after shock</span></p>
-  <p><a href="https://github.com/333HaI/fiscal-multipliers-cee/blob/main/reports/fiscal_multipliers_report_fr.pdf">report (fr)</a>
+    <span><span class="en">95% bands</span><span class="fr">bandes à 95&nbsp;%</span></span>
+    <span><span class="en">x: quarters after shock</span><span class="fr">x&nbsp;: trimestres après le choc</span></span></p>
+  <p><a href="https://github.com/333HaI/fiscal-multipliers-cee/blob/main/reports/fiscal_multipliers_report_fr.pdf"><span class="en">report (fr)</span><span class="fr">rapport</span></a>
     &nbsp; <a href="https://github.com/333HaI/fiscal-multipliers-cee">code</a></p>
 </div></div>
 
 <div class="p"><span class="n">03</span><div>
-  <div class="t"><h3>60/40 with natural resources</h3><span class="dim">python · jupyter</span></div>
-  <p>does a 20% sleeve of gold, commodities, energy or forestry make a 60/40 portfolio safer?
+  <div class="t"><h3><span class="en">60/40 with natural resources</span><span class="fr">60/40 et ressources naturelles</span></h3><span class="dim">python · jupyter</span></div>
+  <p class="en">does a 20% sleeve of gold, commodities, energy or forestry make a 60/40 portfolio safer?
     garch(1,1), cornish-fisher var, five stress periods, 2009-2025.</p>
-  <p>only gold cut portfolio variance significantly (levene p = 0.003): sharpe 1.12 vs 0.99,
+  <p class="fr">une poche de 20&nbsp;% en or, matières premières, énergie ou foresterie rend-elle un
+    portefeuille 60/40 plus sûr&nbsp;? garch(1,1), var de cornish-fisher, cinq périodes de stress, 2009-2025.</p>
+  <p class="en">only gold cut portfolio variance significantly (levene p = 0.003): sharpe 1.12 vs 0.99,
     max drawdown -19.1% vs -21.7%. energy helped only in the 2021-22 inflation.</p>
-  <p><a href="https://github.com/333HaI/econometrie-marches-financiers">code (fr)</a></p>
+  <p class="fr">seul l'or réduit significativement la variance du portefeuille (levene p = 0,003)&nbsp;:
+    sharpe de 1,12 contre 0,99, drawdown maximal de -19,1&nbsp;% contre -21,7&nbsp;%. l'énergie n'a aidé
+    que pendant l'inflation de 2021-2022.</p>
+  <p><a href="https://github.com/333HaI/econometrie-marches-financiers"><span class="en">code (fr)</span><span class="fr">code</span></a></p>
 </div></div>
 
 <div class="p"><span class="n">04</span><div>
-  <div class="t"><h3>us business cycle monitor</h3><span class="dim">python · flask</span></div>
-  <p>dashboard for 19 leading, coincident and lagging fred indicators. latest readings,
+  <div class="t"><h3><span class="en">us business cycle monitor</span><span class="fr">moniteur du cycle économique américain</span></h3><span class="dim">python · flask</span></div>
+  <p class="en">dashboard for 19 leading, coincident and lagging fred indicators. latest readings,
     recession-shaded charts and momentum scores by category.</p>
+  <p class="fr">tableau de bord de 19 indicateurs avancés, coïncidents et retardés de la fred. dernières
+    valeurs, graphiques avec récessions ombrées et scores de momentum par catégorie.</p>
   <p><a href="https://github.com/333HaI/us-business-cycle-monitor">code</a></p>
 </div></div>
 
 <div class="p"><span class="n">05</span><div>
   <div class="t"><h3>hyperedge</h3><span class="dim">typescript</span></div>
-  <p>funding, basis and open interest across five perp exchanges in one dashboard.</p>
+  <p class="en">funding, basis and open interest across five perp exchanges in one dashboard.</p>
+  <p class="fr">taux de financement, base et positions ouvertes de cinq plateformes de contrats
+    perpétuels, dans un seul tableau de bord.</p>
   <p><a href="https://github.com/333HaI/HyperEdge">code</a></p>
 </div></div>
 
 <div class="p"><span class="n">06</span><div>
-  <div class="t"><h3>pca portfolio risk</h3><span class="dim">wip</span></div>
-  <p>does a 3-factor pca covariance beat the sample covariance for minimum-variance portfolios
+  <div class="t"><h3><span class="en">pca portfolio risk</span><span class="fr">risque de portefeuille par acp</span></h3><span class="dim"><span class="en">wip</span><span class="fr">en cours</span></span></div>
+  <p class="en">does a 3-factor pca covariance beat the sample covariance for minimum-variance portfolios
     of 10 etfs? so far no: 3.02% vs 2.94% a year, same volatility.</p>
+  <p class="fr">une covariance acp à 3 facteurs bat-elle la covariance empirique pour des portefeuilles
+    à variance minimale de 10 fnb&nbsp;? pour l'instant, non&nbsp;: 3,02&nbsp;% contre 2,94&nbsp;% par an,
+    même volatilité.</p>
   <p><a href="https://github.com/333HaI/WIP-pca-portfolio-risk">code</a></p>
 </div></div>
 
-<h2>education</h2>
-<div class="t"><span>m.sc. economics, université de montréal</span><span class="dim">2025-26</span></div>
-<p class="dim">macroeconomics and finance. graduating dec 2026.</p>
-<div class="t" style="margin-top:6px"><span>b.sc. economics, université de montréal</span><span class="dim">2022-25</span></div>
-<div class="t" style="margin-top:6px"><span>cfa program, level i passed</span><span class="dim">2026</span></div>
+<h2><span class="en">education</span><span class="fr">formation</span></h2>
+<div class="t"><span><span class="en">m.sc. economics, université de montréal</span><span class="fr">m. sc. en sciences économiques, université de montréal</span></span><span class="dim">2025-26</span></div>
+<p class="dim"><span class="en">macroeconomics and finance. graduating dec 2026.</span><span class="fr">macroéconomie et finance. fin prévue en décembre 2026.</span></p>
+<div class="t" style="margin-top:6px"><span><span class="en">b.sc. economics, université de montréal</span><span class="fr">b. sc. en sciences économiques, université de montréal</span></span><span class="dim">2022-25</span></div>
+<div class="t" style="margin-top:6px"><span><span class="en">cfa program, level i passed</span><span class="fr">programme cfa, niveau i réussi</span></span><span class="dim">2026</span></div>
 
-<h2>tools</h2>
+<h2><span class="en">tools</span><span class="fr">outils</span></h2>
 <p>python (pandas, statsmodels, linearmodels, scipy), r, stata, matlab, sql, excel, typescript, git</p>
-<p class="dim">french, english</p>
+<p class="dim"><span class="en">french, english</span><span class="fr">français, anglais</span></p>
 
-<footer>updated oct 2026</footer>
+<footer><span class="en">updated oct 2026</span><span class="fr">mis à jour en octobre 2026</span></footer>
 </main>
 
 <script>
@@ -205,6 +240,18 @@ btn.addEventListener('click', () => {
 });
 sys.addEventListener('change', mark);
 mark();
+
+const langBtn = document.getElementById('lang');
+for (const l of ['en', 'fr']) document.querySelectorAll('.' + l).forEach(e => { e.lang = l; });
+function markLang() { for (const s of langBtn.children) s.classList.toggle('on', s.dataset.l === document.documentElement.dataset.lang); }
+langBtn.addEventListener('click', () => {
+  const l = document.documentElement.dataset.lang === 'fr' ? 'en' : 'fr';
+  document.documentElement.dataset.lang = l;
+  document.documentElement.lang = l;
+  try { localStorage.setItem('lang', l); } catch (e) {}
+  markLang();
+});
+markLang();
 
 // redraw whenever the chart column changes width, including from 0 when the page loads hidden
 let rt;
