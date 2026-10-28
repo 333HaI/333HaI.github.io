@@ -23,7 +23,7 @@ body { margin: 0; background: var(--bg); color: var(--fg);
   font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
 main { max-width: 720px; margin: 0 auto; padding: 28px 16px 48px; }
 h1 { font-size: 15px; margin: 0; font-weight: 700; }
-h2 { font-size: 13px; margin: 32px 0 4px; font-weight: 700; }
+h2 { font-size: 12px; margin: 44px 0 8px; font-weight: 400; color: var(--dim); }
 h3 { font-size: 13px; margin: 0; font-weight: 700; }
 p { margin: 2px 0; }
 .dim { color: var(--dim); }
@@ -33,7 +33,12 @@ a { color: inherit; }
 #theme { font: inherit; font-size: 12px; color: var(--dim); background: none; border: 0; padding: 0; cursor: pointer; }
 #theme span:hover { text-decoration: underline; }
 #theme .on { color: var(--fg); }
-.p { margin-top: 20px; }
+.p { display: grid; grid-template-columns: 36px 1fr; padding: 20px 0 22px; border-top: 1px solid var(--rule); }
+.p:not(:has(+ .p)) { border-bottom: 1px solid var(--rule); }
+.p > div { min-width: 0; }
+.p > div > p:last-child { margin-top: 8px; }
+.p .n { color: var(--dim); }
+.p .t { margin-bottom: 4px; }
 .t { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; }
 .chart { height: 120px; margin: 8px 0 2px; }
 .chart svg { display: block; overflow: visible; }
@@ -64,7 +69,7 @@ footer { margin-top: 36px; color: var(--dim); }
 
 <h2>projects</h2>
 
-<div class="p">
+<div class="p"><span class="n">01</span><div>
   <div class="t"><h3>canada gdp nowcast</h3><span class="dim">python · statsmodels</span></div>
   <p>weekly nowcast of canadian real gdp. mixed-frequency dynamic factor model on 20 monthly
     statcan, boc and fred series, refit every friday by github actions.</p>
@@ -74,9 +79,9 @@ footer { margin-top: 36px; color: var(--dim); }
     <span><span class="k" style="border-color:var(--line2)"></span>published</span> <span>% q/q ar</span></p>
   <p><a href="https://333hai.github.io/canada-gdp-nowcast/">live</a>
     &nbsp; <a href="https://github.com/333HaI/canada-gdp-nowcast">code</a></p>
-</div>
+</div></div>
 
-<div class="p">
+<div class="p"><span class="n">02</span><div>
   <div class="t"><h3>fiscal multipliers in cee economies</h3><span class="dim">python · linearmodels</span></div>
   <p>master's research paper, graded a+. state-dependent local projections on 8 central and
     eastern european countries, 1997-2024, driscoll-kraay errors.</p>
@@ -88,36 +93,36 @@ footer { margin-top: 36px; color: var(--dim); }
     <span>95% bands</span> <span>x: quarters after shock</span></p>
   <p><a href="https://github.com/333HaI/fiscal-multipliers-cee/blob/main/reports/fiscal_multipliers_report_fr.pdf">report (fr)</a>
     &nbsp; <a href="https://github.com/333HaI/fiscal-multipliers-cee">code</a></p>
-</div>
+</div></div>
 
-<div class="p">
+<div class="p"><span class="n">03</span><div>
   <div class="t"><h3>60/40 with natural resources</h3><span class="dim">python · jupyter</span></div>
   <p>does a 20% sleeve of gold, commodities, energy or forestry make a 60/40 portfolio safer?
     garch(1,1), cornish-fisher var, five stress periods, 2009-2025.</p>
   <p>only gold cut portfolio variance significantly (levene p = 0.003): sharpe 1.12 vs 0.99,
     max drawdown -19.1% vs -21.7%. energy helped only in the 2021-22 inflation.</p>
   <p><a href="https://github.com/333HaI/econometrie-marches-financiers">code (fr)</a></p>
-</div>
+</div></div>
 
-<div class="p">
+<div class="p"><span class="n">04</span><div>
   <div class="t"><h3>us business cycle monitor</h3><span class="dim">python · flask</span></div>
   <p>dashboard for 19 leading, coincident and lagging fred indicators. latest readings,
     recession-shaded charts and momentum scores by category.</p>
   <p><a href="https://github.com/333HaI/us-business-cycle-monitor">code</a></p>
-</div>
+</div></div>
 
-<div class="p">
+<div class="p"><span class="n">05</span><div>
   <div class="t"><h3>hyperedge</h3><span class="dim">typescript</span></div>
   <p>funding, basis and open interest across five perp exchanges in one dashboard.</p>
   <p><a href="https://github.com/333HaI/HyperEdge">code</a></p>
-</div>
+</div></div>
 
-<div class="p">
+<div class="p"><span class="n">06</span><div>
   <div class="t"><h3>pca portfolio risk</h3><span class="dim">wip</span></div>
   <p>does a 3-factor pca covariance beat the sample covariance for minimum-variance portfolios
     of 10 etfs? so far no: 3.02% vs 2.94% a year, same volatility.</p>
   <p><a href="https://github.com/333HaI/WIP-pca-portfolio-risk">code</a></p>
-</div>
+</div></div>
 
 <h2>education</h2>
 <div class="t"><span>m.sc. economics, université de montréal</span><span class="dim">2025-26</span></div>
@@ -201,8 +206,10 @@ btn.addEventListener('click', () => {
 sys.addEventListener('change', mark);
 mark();
 
+// redraw whenever the chart column changes width, including from 0 when the page loads hidden
 let rt;
-addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(render, 100); });
+new ResizeObserver(() => { clearTimeout(rt); rt = setTimeout(render, 50); })
+  .observe(document.getElementById('c-nowcast'));
 </script>
 </body>
 </html>
