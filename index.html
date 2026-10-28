@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haris Imam</title>
+<meta name="description" content="Haris Imam. Economics master's student (macro and finance) at Université de Montréal. Forecasting, applied macro and markets projects.">
+<link rel="icon" href="data:,">
+<style>
+:root { color-scheme: light; --bg: #fff; --fg: #111; --dim: #777; --rule: #e4e4e4;
+  --line2: #a8a8a8; --band1: rgba(17,17,17,.10); --band2: rgba(17,17,17,.05); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { color-scheme: dark; --bg: #0f0f0f; --fg: #e4e4e4; --dim: #8a8a8a;
+    --rule: #262626; --line2: #5c5c5c; --band1: rgba(228,228,228,.11); --band2: rgba(228,228,228,.06); }
+}
+:root[data-theme="dark"] { color-scheme: dark; --bg: #0f0f0f; --fg: #e4e4e4; --dim: #8a8a8a;
+  --rule: #262626; --line2: #5c5c5c; --band1: rgba(228,228,228,.11); --band2: rgba(228,228,228,.06); }
+html { background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 13px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+main { max-width: 720px; margin: 0 auto; padding: 28px 16px 48px; }
+h1 { font-size: 15px; margin: 0; font-weight: 700; }
+h2 { font-size: 13px; margin: 32px 0 4px; font-weight: 700; }
+h3 { font-size: 13px; margin: 0; font-weight: 700; }
+p { margin: 2px 0; }
+.dim { color: var(--dim); }
+a { color: inherit; }
+.links a { margin-right: 14px; white-space: nowrap; }
+.p { margin-top: 20px; }
+.t { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 16px; }
+.chart { height: 120px; margin: 8px 0 2px; }
+.chart svg { display: block; overflow: visible; }
+.chart text { fill: var(--dim); font: 11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.chart .z { stroke: var(--rule); }
+.chart .l1 { stroke: var(--fg); stroke-width: 1.25; fill: none; }
+.chart .l2 { stroke: var(--line2); stroke-width: 1.25; fill: none; }
+.chart .b1 { fill: var(--band1); }
+.chart .b2 { fill: var(--band2); }
+.k { display: inline-block; width: 14px; border-top: 2px solid; vertical-align: middle; margin-right: 4px; }
+.leg { font-size: 12px; }
+.leg > span { white-space: nowrap; margin-right: 14px; }
+footer { margin-top: 36px; color: var(--dim); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>haris imam</h1>
+<p>economics master's student, macro and finance. cfa level ii candidate.</p>
+<p class="dim">montreal</p>
+<p class="links" style="margin-top:10px">
+  <a href="https://github.com/333HaI">github</a><a href="https://www.linkedin.com/in/haris-i-9279a033b/">linkedin</a><a href="mailto:haris.im@proton.me">haris.im@proton.me</a><a href="tel:+15145754626">514-575-4626</a>
+</p>
+
+<h2>projects</h2>
+
+<div class="p">
+  <div class="t"><h3>canada gdp nowcast</h3><span class="dim">python · statsmodels</span></div>
+  <p>weekly nowcast of canadian real gdp. mixed-frequency dynamic factor model on 20 monthly
+    statcan, boc and fred series, refit every friday by github actions.</p>
+  <p>backtest 2010-26, ex covid: rmse 1.59, vs 2.23 for an ar(1) and 1.90 for a naive tracker.</p>
+  <div class="chart" id="c-nowcast"></div>
+  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span>nowcast at end of quarter</span>
+    <span><span class="k" style="border-color:var(--line2)"></span>published</span> <span>% q/q ar</span></p>
+  <p><a href="https://333hai.github.io/canada-gdp-nowcast/">live</a>
+    &nbsp; <a href="https://github.com/333HaI/canada-gdp-nowcast">code</a></p>
+</div>
+
+<div class="p">
+  <div class="t"><h3>fiscal multipliers in cee economies</h3><span class="dim">python · linearmodels</span></div>
+  <p>master's research paper, graded a+. state-dependent local projections on 8 central and
+    eastern european countries, 1997-2024, driscoll-kraay errors.</p>
+  <p>a year after a spending shock the multiplier is 3.9 in recessions and -2.0 in expansions.
+    dropping 2020-21 shrinks it and the gap stops being significant.</p>
+  <div class="chart" id="c-fiscal"></div>
+  <p class="dim leg"><span><span class="k" style="border-color:var(--fg)"></span>recession</span>
+    <span><span class="k" style="border-color:var(--line2)"></span>expansion</span>
+    <span>95% bands</span> <span>x: quarters after shock</span></p>
+  <p><a href="https://github.com/333HaI/fiscal-multipliers-cee/blob/main/reports/fiscal_multipliers_report_fr.pdf">report (fr)</a>
+    &nbsp; <a href="https://github.com/333HaI/fiscal-multipliers-cee">code</a></p>
+</div>
+
+<div class="p">
+  <div class="t"><h3>60/40 with natural resources</h3><span class="dim">python · jupyter</span></div>
+  <p>does a 20% sleeve of gold, commodities, energy or forestry make a 60/40 portfolio safer?
+    garch(1,1), cornish-fisher var, five stress periods, 2009-2025.</p>
+  <p>only gold cut portfolio variance significantly (levene p = 0.003): sharpe 1.12 vs 0.99,
+    max drawdown -19.1% vs -21.7%. energy helped only in the 2021-22 inflation.</p>
+  <p><a href="https://github.com/333HaI/econometrie-marches-financiers">code (fr)</a></p>
+</div>
+
+<div class="p">
+  <div class="t"><h3>us business cycle monitor</h3><span class="dim">python · flask</span></div>
+  <p>dashboard for 19 leading, coincident and lagging fred indicators. latest readings,
+    recession-shaded charts and momentum scores by category.</p>
+  <p><a href="https://github.com/333HaI/us-business-cycle-monitor">code</a></p>
+</div>
+
+<div class="p">
+  <div class="t"><h3>hyperedge</h3><span class="dim">typescript</span></div>
+  <p>funding, basis and open interest across five perp exchanges in one dashboard.</p>
+  <p><a href="https://github.com/333HaI/HyperEdge">code</a></p>
+</div>
+
+<div class="p">
+  <div class="t"><h3>pca portfolio risk</h3><span class="dim">wip</span></div>
+  <p>does a 3-factor pca covariance beat the sample covariance for minimum-variance portfolios
+    of 10 etfs? so far no: 3.02% vs 2.94% a year, same volatility.</p>
+  <p><a href="https://github.com/333HaI/WIP-pca-portfolio-risk">code</a></p>
+</div>
+
+<h2>education</h2>
+<div class="t"><span>m.sc. economics, université de montréal</span><span class="dim">2025-26</span></div>
+<p class="dim">macroeconomics and finance. graduating dec 2026.</p>
+<div class="t" style="margin-top:6px"><span>b.sc. economics, université de montréal</span><span class="dim">2022-25</span></div>
+<div class="t" style="margin-top:6px"><span>cfa program, level i passed</span><span class="dim">2026</span></div>
+
+<h2>tools</h2>
+<p>python (pandas, statsmodels, linearmodels, scipy), r, stata, matlab, sql, excel, typescript, git</p>
+<p class="dim">french, english</p>
+
+<footer>updated oct 2026</footer>
+</main>
+
+<script>
+// nowcast backtest 2010Q1-2026Q2, 2020Q1-2021Q1 left out
+const NOW = {
+  model: [4.39,5.49,2.39,3.13,4.56,1.89,3.18,3.08,3.2,2.54,2.14,0.93,2.93,3.42,0.76,2.91,0.79,2.94,3.28,2.24,0.39,1.83,2.61,-0.49,2.32,0.2,2.13,2.52,3.48,4.17,1.64,3.23,2.36,2.24,2.11,2.01,0.96,3.0,2.44,0.36,null,null,null,null,null,3.17,5.49,8.37,3.9,5.76,1.81,2.94,2.99,2.78,1.22,-0.18,1.5,3.47,1.72,2.51,2.72,0.23,0.83,1.9,0.04,2.92],
+  actual: [4.93,2.11,2.83,4.56,3.08,0.73,5.59,3.22,0.25,1.31,0.55,0.83,3.63,2.32,3.33,4.25,0.68,3.7,3.89,2.79,-2.21,-1.09,1.44,0.27,2.39,-1.98,4.22,2.26,5.13,4.28,0.13,2.04,4.73,3.16,2.03,0.95,0.97,4.45,1.12,1.15,null,null,null,null,null,-0.47,8.3,7.36,4.21,4.63,3.27,0.25,4.28,0.64,0.2,0.21,2.95,3.3,3.32,2.84,2.89,-0.97,1.9,-0.98,0.33,3.32]
+};
+// country-average point multipliers, h = 0..12
+const FIS = {
+  rec: [2.07,2.03,2.64,3.28,3.93,4.32,4.19,3.97,3.85,3.13,2.58,2.16,2.37],
+  recLo: [0.49,0.20,0.56,0.99,1.55,2.04,1.98,1.87,1.89,1.05,0.51,0.17,0.51],
+  recHi: [3.65,3.85,4.72,5.57,6.31,6.59,6.40,6.07,5.81,5.20,4.66,4.15,4.22],
+  exp: [-0.90,-0.76,-1.36,-1.37,-1.96,-2.54,-1.70,-0.93,-0.91,0.88,1.66,2.31,1.29],
+  expLo: [-1.81,-1.91,-2.86,-3.27,-3.88,-5.06,-4.20,-3.57,-3.91,-2.45,-1.80,-0.56,-1.21],
+  expHi: [0.02,0.38,0.15,0.53,-0.04,-0.01,0.80,1.72,2.08,4.22,5.11,5.19,3.79]
+};
+
+function draw(el, c) {
+  const W = el.clientWidth, H = el.clientHeight, L = 26, R = 2, T = 4, B = 16;
+  const x = i => L + (W - L - R) * i / (c.n - 1);
+  const y = v => T + (H - T - B) * (c.max - v) / (c.max - c.min);
+  const path = ys => {
+    let d = '', pen = false;
+    ys.forEach((v, i) => {
+      if (v == null) { pen = false; return; }
+      d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1);
+      pen = true;
+    });
+    return d;
+  };
+  let s = `<line class="z" x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}"/>`;
+  for (const [lo, hi, cls] of c.bands || []) {
+    const top = hi.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`);
+    const bot = lo.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).reverse();
+    s += `<polygon class="${cls}" points="${top.concat(bot).join(' ')}"/>`;
+  }
+  for (const [ys, cls] of c.lines) s += `<path class="${cls}" d="${path(ys)}"/>`;
+  for (const t of c.yticks) s += `<text x="${L - 6}" y="${y(t) + 4}" text-anchor="end">${t}</text>`;
+  for (const [i, lab] of c.xticks) s += `<text x="${x(i)}" y="${H - 2}" text-anchor="middle">${lab}</text>`;
+  el.innerHTML = `<svg width="${W}" height="${H}">${s}</svg>`;
+}
+
+function render() {
+  draw(document.getElementById('c-nowcast'), {
+    n: 66, min: -3, max: 9, yticks: [0, 4, 8],
+    xticks: [[0, '2010'], [16, '2014'], [32, '2018'], [48, '2022'], [64, '2026']],
+    lines: [[NOW.actual, 'l2'], [NOW.model, 'l1']]
+  });
+  draw(document.getElementById('c-fiscal'), {
+    n: 13, min: -5.5, max: 7, yticks: [-4, 0, 4],
+    xticks: [[0, '0'], [4, '4'], [8, '8'], [12, '12']],
+    bands: [[FIS.expLo, FIS.expHi, 'b2'], [FIS.recLo, FIS.recHi, 'b1']],
+    lines: [[FIS.exp, 'l2'], [FIS.rec, 'l1']]
+  });
+}
+render();
+let rt;
+addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(render, 100); });
+</script>
+</body>
+</html>
